@@ -12,8 +12,8 @@ import javax.persistence.Id;
 public class Customer {
 
 	// Define Table Columns
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id // Sets the primary key
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // enables AUTO_INCREMENT
 	private long id;
 	
 	@Column(name = "firstname", nullable = false) // This annotation takes control of the naming of the column
