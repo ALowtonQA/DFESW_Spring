@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.qa.dfespringboot.entities.Customer;
+import com.qa.dfespringboot.services.CustomerService;
 
 // Handle incoming HTTP requests and send responses
 // Uses JSON data
@@ -20,48 +21,42 @@ import com.qa.dfespringboot.entities.Customer;
 @RequestMapping("/customer") // adds a prefix to the request URLs
 public class CustomerController {
 
-	// TEMPORARY storage, until we implement the real database later!
-	private List<Customer> customers = new ArrayList<>();
+	private CustomerService service;
+	
+	// Dependency injection
+	public CustomerController(CustomerService service) {
+		this.service = service;
+	}
 	
 	//GET - READ
 	//ReadAll
 	@GetMapping("/readAll")
 	public List<Customer> readAll() {
-		return this.customers;
+		return this.service.readAll();
 	}
 	
 	//ReadByID
 	@GetMapping("/readById/{id}")
 	public Customer readById(@PathVariable int id) {
-		return this.customers.get(id);
+		return this.service.readById(id);
 	}
 	
 	
 	//POST - CREATE
 	@PostMapping("/create") // localhost:8080/customer/create
 	public Customer create(@RequestBody Customer customer) {
-		this.customers.add(customer);
-		
-		// Returns the latest entry added to the list
-		return this.customers.get(this.customers.size() - 1);
+		return this.service.create(customer);
 	}
 	
 	//PUT - UPDATE
 	@PutMapping("/update/{id}")
 	public Customer update(@PathVariable int id, @RequestBody Customer customer) {
-		// Removing the original customer
-		this.customers.remove(id);
-		
-		// Add the updated customer
-		this.customers.add(id, customer);
-		
-		// Return the updated user
-		return this.customers.get(id);
+		return this.service.update(id, customer);
 	}
 	
 	//DELETE - DELETE
 	@DeleteMapping("/delete/{id}")
 	public Customer delete(@PathVariable int id) {
-		return this.customers.remove(id);
+		return this.service.delete(id);
 	}
 }
