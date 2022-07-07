@@ -6,46 +6,52 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.qa.dfespringboot.entities.Customer;
+import com.qa.dfespringboot.repos.CustomerRepo;
 
 @Service
 public class CustomerService {
 
-	// TEMPORARY storage, until we implement the real database later!
-	private List<Customer> customers = new ArrayList<>();
+	private CustomerRepo repo;
+	
+	public CustomerService(CustomerRepo repo) {
+		this.repo = repo;
+	}
 	
 	//GET - READ
 	//ReadAll
 	public List<Customer> readAll() {
-		return this.customers;
+		return this.repo.findAll();
 	}
 	
 	//ReadByID
-	public Customer readById(int id) {
-		return this.customers.get(id);
+	public Customer readById(long id) {
+		return this.repo.findById(id).get();
 	}
 	
 	//POST - CREATE
 	public Customer create(Customer customer) {
-		this.customers.add(customer);
-		
-		// Returns the latest entry added to the list
-		return this.customers.get(this.customers.size() - 1);
+		return this.repo.saveAndFlush(customer);
 	}
 	
 	//PUT - UPDATE
-	public Customer update(int id, Customer customer) {
-		// Removing the original customer
-		this.customers.remove(id);
+	public Customer update(long id, Customer customer) {
+		//1) Get the existing entry.
+		Customer existing = this.repo.findById(id).get();
 		
-		// Add the updated customer
-		this.customers.add(id, customer);
+		//2) Change the existing entry, using our new customer object above.
+		existing.setFirstName(customer.getFirstName());
+		existing.setLastName(customer.getLastName());
+		existing.setEmail(customer.getEmail());
 		
-		// Return the updated user
-		return this.customers.get(id);
+		//3) Save the entry back into the Database.
+		return this.repo.saveAndFlush(existing);
 	}
 	
+	
 	//DELETE - DELETE
-	public Customer delete(int id) {
-		return this.customers.remove(id);
+	public boolean delete(long id) {
+		this.repo.deleteById(id);
+		
+		return !this.repo.existsById(id); // this should be false. If it's true, then the delete failed, somehow.
 	}
 }
