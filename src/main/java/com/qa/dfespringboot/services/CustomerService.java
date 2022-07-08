@@ -28,6 +28,11 @@ public class CustomerService {
 		return this.repo.findById(id).get();
 	}
 	
+	//ReadByFirstName
+	public List<Customer> readByFirstName(String firstName) {
+		return this.repo.findCustomerByFirstName(firstName);
+	}
+	
 	//POST - CREATE
 	public Customer create(Customer customer) {
 		return this.repo.saveAndFlush(customer);

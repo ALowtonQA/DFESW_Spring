@@ -1,5 +1,7 @@
 package com.qa.dfespringboot.repos;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,5 +11,8 @@ import com.qa.dfespringboot.entities.Customer;
 // So long = Long, int = Integer.
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
+	
+	// SELECT * FROM customer WHERE first_name = firstName;
+	List<Customer> findCustomerByFirstName(String firstName);
 	
 }

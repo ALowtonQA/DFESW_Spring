@@ -38,6 +38,12 @@ public class CustomerController {
 		return this.service.readById(id);
 	}
 	
+	//ReadByFirstName
+	@GetMapping("/readByFirstName/{firstName}")
+	public List<Customer> readByFirstName(@PathVariable String firstName) {
+		return this.service.readByFirstName(firstName);
+	}
+	
 	//POST - CREATE
 	@PostMapping("/create") // localhost:8080/customer/create
 	public Customer create(@RequestBody Customer customer) {
