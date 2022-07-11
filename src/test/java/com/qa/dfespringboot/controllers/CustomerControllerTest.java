@@ -1,7 +1,10 @@
 package com.qa.dfespringboot.controllers;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,11 @@ public class CustomerControllerTest {
 	private ObjectMapper mapper; // used for converting objects to JSON
 	
 	@Test
+	public void createTest() throws Exception {
+		
+	}
+	
+	@Test
 	public void readAllTest() throws Exception {
 		// Setting up my expected output object
 		List<Customer> output = new ArrayList<>();
@@ -44,8 +52,37 @@ public class CustomerControllerTest {
 		mvc.perform(get("/customer/readAll")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().json(outputAsJSON));
+
+	}
+	
+	@Test
+	public void readByIdTest() throws Exception {
+		Customer entry = new Customer(1L, "Anoush", "Lowton", "alowton@qa.com");
+		String entryAsJSON = this.mapper.writeValueAsString(entry);
 		
+		mvc.perform(get("/customer/readById/1")
+			.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(content().json(entryAsJSON));
+	}
+	
+	@Test
+	public void updateTest() throws Exception {
+		Customer entry = new Customer("A", "L", "al@qa.com");
+		Customer result = new Customer(1L, "A", "L", "al@qa.com");
+		String entryAsJSON = this.mapper.writeValueAsString(entry);
+		String resultAsJSON = this.mapper.writeValueAsString(result);
 		
+		mvc.perform(put("/customer/update/1")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(entryAsJSON))
+			.andExpect(content().json(resultAsJSON));
+	}
+	
+	@Test
+	public void deleteTest() throws Exception {
+		mvc.perform(delete("/customer/delete/1")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk());
 	}
 	
 }
