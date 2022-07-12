@@ -1,10 +1,7 @@
 package com.qa.dfespringboot.services;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.stereotype.Service;
-
 import com.qa.dfespringboot.entities.Customer;
 import com.qa.dfespringboot.repos.CustomerRepo;
 

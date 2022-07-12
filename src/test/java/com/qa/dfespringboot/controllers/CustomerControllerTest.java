@@ -2,6 +2,7 @@ package com.qa.dfespringboot.controllers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,7 +38,17 @@ public class CustomerControllerTest {
 	
 	@Test
 	public void createTest() throws Exception {
-		
+		Customer entry = new Customer("A", "L", "al@qa.com");
+		String entryAsJSON = mapper.writeValueAsString(entry);
+
+		Customer result = new Customer(2L, "A", "L", "al@qa.com");
+		String resultAsJSON = mapper.writeValueAsString(result);
+
+		mvc.perform(post("/customer/create")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(entryAsJSON))
+				.andExpect(content().json(resultAsJSON));
+
 	}
 	
 	@Test
@@ -82,7 +93,7 @@ public class CustomerControllerTest {
 	public void deleteTest() throws Exception {
 		mvc.perform(delete("/customer/delete/1")
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+				.andExpect(content().string("true"));
 	}
 	
 }
